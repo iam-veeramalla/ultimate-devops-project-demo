@@ -31,7 +31,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: productcatalogservice
-          image: abhishekf5/product-catalog:13134113508
+          image: adwaitdocker/product-catalog-go-ms:v1
           imagePullPolicy: IfNotPresent
           ports:
             
@@ -62,3 +62,10 @@ spec:
               memory: 20Mi
           volumeMounts:
       volumes:
+
+
+
+
+
+
+
