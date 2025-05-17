@@ -1,6 +1,9 @@
 # CI for Product Catalog Service
-
 name: product-catalog-ci
+
+permissions:
+  contents: write
+  packages: write
 
 on: 
     pull_request:
