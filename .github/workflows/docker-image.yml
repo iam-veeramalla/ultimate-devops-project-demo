@@ -1,0 +1,89 @@
+# CI YAML file for Product Catalog
+name: product-catalog-ci
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: checkout code
+          uses: actions/checkout@v4
+
+        - name: Set up Golang 1.23
+          uses: actions/setup-go@v2
+          with:
+            go-version: '1.23'
+        
+        - name: Build project
+          run: |
+            cd src/product-catalog
+            go mod download
+            go build -o product-catalog-service main.go
+
+        - name: Run unit tests
+          run: go test src/product-catalog/...
+        
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run golangci-lint 
+        run: |
+            go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+            golangci-lint run src/product-catalog/... --timeout 5m
+
+      - name: Check code formatting
+        run: go fmt ./...
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install Docker
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: src/product-catalog
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog-service:${{ github.run_id }}
+  
+  update-k8s:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.TOKEN }}
+
+      - name: Update Kubernetes deployment
+        run: |
+            sed -i "s|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}|" kubernetes/productcatalog/deploy.yaml
+
+      - name: Git commit changes
+        run: |
+            git config --global user.email "noah.rajini@gmail.com"
+            git config --global user.name "noahsuresh"
+            git add kubernetes/productcatalog/deploy.yaml
+            git commit -m "Update product catalog image to ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}" 
+            git push origin HEAD:main -f
