@@ -6,6 +6,7 @@ package main
 //go:generate go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 //go:generate protoc --go_out=./ --go-grpc_out=./ --proto_path=../../pb ../../pb/demo.proto
 
+:
 import (
 	"context"
 	"fmt"
@@ -315,8 +316,4 @@ func createClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error)
 		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
 	)
 }
-
-
-
-
 
