@@ -1,108 +1,218 @@
-# CI for Product Catalog Service
+name: Product Catalog CI-CD
 
-name: product-catalog-ci
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
-on: 
-    pull_request:
-        branches:
-        - main
+permissions:
+  contents: write
+
+env:
+  DOCKER_IMAGE: leninfitfreak/product-catalog
+  PRODUCT_CATALOG_PORT: 8088
+  SERVICE_PATH: src/product-catalog
+  K8S_DEPLOY_FILE: kubernetes/productcatalog/deploy.yaml
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  # ---------------------
+  # 1. Unit Tests
+  # ---------------------
+  unit-tests:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
 
-        steps:
-        - name: checkout code
-          uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24.x"
+          check-latest: true
 
-        - name: Setup Go 1.22
-          uses: actions/setup-go@v2
-          with:
-            go-version: 1.22
-        
-        - name: Build
-          run: |
-            cd src/product-catalog
-            go mod download
-            go build -o product-catalog-service main.go
+      - name: Check Go Version
+        run: go version
 
-        - name: unit tests
-          run: |
-            cd src/product-catalog
-            go test ./...
-    
-    code-quality:
-        runs-on: ubuntu-latest
+      - name: Ensure go.sum
+        working-directory: ${{ env.SERVICE_PATH }}
+        run: go mod tidy
 
-        steps:
-        - name: checkout code
-          uses: actions/checkout@v4
-        
-        - name: Setup Go 1.22
-          uses: actions/setup-go@v2
-          with:
-           go-version: 1.22
-        
-        - name: Run golangci-lint
-          uses: golangci/golangci-lint-action@v6
-          with:
-            version: v1.55.2
-            run: golangci-lint run
-            working-directory: src/product-catalog
+      - name: Cache Go Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
 
-    docker:
-        runs-on: ubuntu-latest
+      - name: Install Dependencies
+        working-directory: ${{ env.SERVICE_PATH }}
+        run: go get -u -t ./...
 
-        needs: build
+      - name: Run Unit Tests
+        working-directory: ${{ env.SERVICE_PATH }}
+        run: go test ./... -v
 
-        steps:
-        - name: checkout code
-          uses: actions/checkout@v4
+  # ---------------------
+  # 2. Code Quality
+  # ---------------------
+  code-quality:
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    if: always()
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Install Docker
-          uses: docker/setup-buildx-action@v1
-        
-        - name: Login to Docker
-          uses: docker/login-action@v3
-          with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_TOKEN }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24.x"
+          check-latest: true
 
-        - name: Docker Push
-          uses: docker/build-push-action@v6
-          with:
-            context: src/product-catalog
-            file: src/product-catalog/Dockerfile
-            push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
+      - name: Check Go Version
+        run: go version
 
-    
-    updatek8s:
-        runs-on: ubuntu-latest
+      - name: Install Staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
-        needs: docker
+      - name: Run Staticcheck
+        working-directory: ${{ env.SERVICE_PATH }}
+        run: staticcheck ./...
 
-        steps:
-        - name: checkout code
-          uses: actions/checkout@v4
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
+  # ---------------------
+  # 3. Vulnerability Scan
+  # ---------------------
+  vulnerability-scan:
+    runs-on: ubuntu-latest
+    needs: [code-quality]
+    if: always()
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Update tag in kubernetes deployment manifest
-          run: | 
-               sed -i "s|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}|" kubernetes/productcatalog/deploy.yaml
-        
-        - name: Commit and push changes
-          run: |
-            git config --global user.email "abhishek@gmail.com"
-            git config --global user.name "Abhishek Veeramalla"
-            git add kubernetes/productcatalog/deploy.yaml
-            git commit -m "[CI]: Update product catalog image tag"
-            git push origin HEAD:main -f
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24.x"
+          check-latest: true
 
-        
-        
-          
+      - name: Check Go Version
+        run: go version
 
+      - name: Install GoSec
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
 
-        
+      - name: Run GoSec Security Scan
+        working-directory: ${{ env.SERVICE_PATH }}
+        run: gosec ./...
+
+  # ---------------------
+  # 4. Build Binary
+  # ---------------------
+  build-binary:
+    runs-on: ubuntu-latest
+    needs: [vulnerability-scan]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24.x"
+          check-latest: true
+
+      - name: Check Go Version
+        run: go version
+
+      - name: Build Binary
+        working-directory: ${{ env.SERVICE_PATH }}
+        run: |
+          export PRODUCT_CATALOG_PORT=${{ env.PRODUCT_CATALOG_PORT }}
+          go build -o product-catalog .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: product-catalog-binary
+          path: ${{ env.SERVICE_PATH }}/product-catalog
+
+  # ---------------------
+  # 5. Docker Build & Push
+  # ---------------------
+  docker-build-push:
+    runs-on: ubuntu-latest
+    needs: [build-binary]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: product-catalog-binary
+          path: ${{ env.SERVICE_PATH }}
+
+      - name: Set Docker Tag
+        id: vars
+        run: |
+          TAG=run-${GITHUB_RUN_ID}
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Docker Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and Push Docker Image
+        working-directory: ${{ env.SERVICE_PATH }}
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE }}:${{ steps.vars.outputs.tag }} .
+          docker push ${{ env.DOCKER_IMAGE }}:${{ steps.vars.outputs.tag }}
+
+      - name: Save Docker Tag
+        run: echo "${{ steps.vars.outputs.tag }}" > docker-tag.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docker-tag
+          path: docker-tag.txt
+
+  # ---------------------
+  # 6. Update Kubernetes Manifest
+  # ---------------------
+  update-k8s:
+    runs-on: ubuntu-latest
+    needs: [docker-build-push]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: docker-tag
+          path: .
+
+      - name: Load Docker Tag
+        run: |
+          TAG=$(cat docker-tag.txt)
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "Using TAG=$TAG"
+
+      - name: Update Kubernetes Manifest
+        run: |
+          sed -i "s|image: .*|image: ${{ env.DOCKER_IMAGE }}:${TAG}|" ${{ env.K8S_DEPLOY_FILE }}
+          echo "Updated image in ${{ env.K8S_DEPLOY_FILE }} to ${{ env.DOCKER_IMAGE }}:${TAG}"
+
+      - name: Commit and Push Updated Manifest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "lenin"
+          git config user.email "leninfitfreak@gmail.com"
+          git add ${{ env.K8S_DEPLOY_FILE }}
+          git commit -m "Update image tag to ${TAG} [CI SKIP]" || echo "No changes to commit"
+          git push origin main
