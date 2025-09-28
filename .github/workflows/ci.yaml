@@ -9,7 +9,7 @@ on:
         
 jobs:
     build:
-        runs-oon: ubuntu-latest
+        runs-on: ubuntu-latest
         
         steps:
         - name: checkout code
@@ -39,10 +39,10 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v4
 
-          - name: Run golangcci-lint
-            run:
-                go install github.com/golangci/golangci-lint/cmd/golangci-lint@2.4
-                golangci-lint run src/product-catalog/...
+        - name: Run golangcci-lint
+          run:
+              go install github.com/golangci/golangci-lint/cmd/golangci-lint@2.4
+              golangci-lint run src/product-catalog/...
 
     docker:
         runs-on: ubuntu-latest
@@ -56,19 +56,20 @@ jobs:
         - name: Install docker
           uses: docker/setup-buildx-action@v1
           
-         - name: Login to docker 
-           uses: docker/login-action@v3
-           with:
-             username: ${{secrets.DOCKER_USERNAME}}
-             password: ${{secrets.DOCKER_TOKEN}} 
+        - name: Login to docker 
+          uses: docker/login-action@v3
+          with:
+            username: ${{secrets.DOCKER_USERNAME}}
+            password: ${{secrets.DOCKER_TOKEN}}            
+             
 
-         - name: Docker Push
-           uses: docker/build-push-action@v6
-           with:
-             context: src/product-catalog
-             file: Dockerfile
-             push: true
-             tags: ${{secrets.DOCKER_USERNAME}}/product-catalog-service:${{github.run_id}}
+        - name: Docker Push
+          uses: docker/build-push-action@v6
+          with:
+            context: src/product-catalog
+            file: Dockerfile
+            push: true
+            tags: ${{secrets.DOCKER_USERNAME}}/product-catalog-service:${{github.run_id}}
 
     updatek8:
         runs-on: ubuntu-latest
@@ -83,7 +84,7 @@ jobs:
 
         - name: update tag in kubernetes deployment manifest 
           run: |
-               sed -i 's/image: .*/image: ${{secret.DOCKERHUB_USERNAME}}/product-catalog:${{github.run_id}}/' kubernetes/productcatalog/deploy.yaml 
+               sed -i 's/image: .*/image: ${{secrets.DOCKER_USERNAME}}/product-catalog:${{github.run_id}}/' kubernetes/productcatalog/deploy.yaml 
                
         - name: commit and push changes
           run: |
