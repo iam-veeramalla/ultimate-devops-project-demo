@@ -15,10 +15,10 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v4
 
-        - name: Setup Go 1.23.2  
+        - name: Setup Go 1.23.x 
           uses: actions/setup-go@v4
           with:
-            go-version:1.23.2
+            go-version:1.23.x
 
         - name: Build
           run: 
