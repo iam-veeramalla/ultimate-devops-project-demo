@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opentelemetry-demo
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: opentelemetry-demo-role
+  namespace: default
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "endpoints"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: opentelemetry-demo-rolebinding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: opentelemetry-demo
+    namespace: default
+roleRef:
+  kind: Role
+  name: opentelemetry-demo-role
+  apiGroup: rbac.authorization.k8s.io

@@ -26,3 +26,5 @@ ENV AD_PORT 9099
 
 ENTRYPOINT ["./build/install/opentelemetry-demo-ad/bin/Ad"]
 
+
+
