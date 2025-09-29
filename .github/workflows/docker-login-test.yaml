@@ -1,0 +1,18 @@
+name: docker-login-test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-docker-login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Verify login
+        run: docker info
+
