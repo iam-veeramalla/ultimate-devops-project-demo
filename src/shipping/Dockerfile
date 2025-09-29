@@ -27,8 +27,7 @@ RUN if [ "${TARGETPLATFORM}" = "${BUILDPLATFORM}" ] ; then \
 
 WORKDIR /app/
 
-COPY /src/shipping/ /app/
-COPY /pb/ /app/proto/
+COPY . /app/
 
 # Compile or crosscompile
 RUN if [ "${TARGETPLATFORM}" = "${BUILDPLATFORM}" ] ; then \
@@ -58,8 +57,7 @@ RUN wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health
 FROM debian:bookworm-slim AS release
 
 WORKDIR /app
-COPY --from=builder /app/target/release/shipping /app/shipping
-COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
+COPY . /app/
 
 EXPOSE ${SHIPPING_PORT}
 ENTRYPOINT ["/app/shipping"]

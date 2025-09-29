@@ -1,11 +1,8 @@
----
-# Source: opentelemetry-demo/templates/component.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: opentelemetry-demo-productcatalogservice
   labels:
-    
     opentelemetry.io/name: opentelemetry-demo-productcatalogservice
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/component: productcatalogservice
@@ -17,12 +14,10 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      
       opentelemetry.io/name: opentelemetry-demo-productcatalogservice
   template:
     metadata:
       labels:
-        
         opentelemetry.io/name: opentelemetry-demo-productcatalogservice
         app.kubernetes.io/instance: opentelemetry-demo
         app.kubernetes.io/component: productcatalogservice
@@ -31,10 +26,9 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: productcatalogservice
-          image: abhishekf5/product-catalog:13134113508
+          image: in30minthing/product-catalog:${{ github.run_id }}
           imagePullPolicy: IfNotPresent
           ports:
-            
             - containerPort: 8080
               name: service
           env:
@@ -60,5 +54,9 @@ spec:
           resources:
             limits:
               memory: 20Mi
-          volumeMounts:
-      volumes:
+          volumeMounts: []   # empty list to avoid syntax errors
+      volumes: []           # empty list to avoid syntax errors
+# trigger workflow
+# trigger workflow
+# trigger workflow
+# trigger workflow
