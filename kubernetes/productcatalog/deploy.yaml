@@ -62,3 +62,5 @@ spec:
               memory: 20Mi
           volumeMounts:
       volumes:
+
+# Source: opentelemetry-demo/templates/service.yaml
