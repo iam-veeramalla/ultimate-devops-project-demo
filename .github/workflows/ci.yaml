@@ -48,7 +48,7 @@ jobs:
 
       - name: Run golangci-lint
         run: |
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.54.2
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.61.x
           export PATH=$PATH:$(go env GOPATH)/bin
           golangci-lint run --timeout=5m --verbose
         working-directory: src/product-catalog  
