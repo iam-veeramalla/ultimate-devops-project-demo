@@ -1,7 +1,10 @@
-# CI for product catalog service
 name: product-catalog-ci
 
 on:
+  push:
+    branches:
+      - main
+      - githubcicheck   # add more feature branches if needed
   pull_request:
     branches:
       - main
@@ -10,25 +13,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        go-version: [1.21, 1.22, 1.23]   # test against multiple Go versions
+    name: Go ${{ matrix.go-version }} CI
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          go-version: '1.23.x'
+          go-version: ${{ matrix.go-version }}
+
+      - name: Install dependencies
+        run: go mod tidy
 
       - name: Build
-        run: |
-          cd src/product-catalog
-          go mod download
-          go build -o product-catalog-service main.go
+        run: go build ./...
 
-      - name: Unit tests
-        run: |
-          cd src/product-catalog
-          go test ./...
+      - name: Run tests
+        run: go test -v ./...
 
   code-quality:
     runs-on: ubuntu-latest
