@@ -10,74 +10,48 @@ on:
       - main
 
 jobs:
-    build:
-      runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.21.x, 1.22.x, 1.23.x]
 
-      strategy:
-        matrix:
-        go-version: [1.21.x, 1.22.x, 1.23.x]   # test against multiple Go versions
-      name: Go ${{ matrix.go-version }} CI
-
-
-    - name: Setup Go 
-      uses: actions/setup-go@v5
-      with:
-        go-version: ${{matrix.go-version}}
-        
-    - name: Build
-      run: |
-        cd src/product-catalog
-        go mod download
-        go build -o product-catalog-service main.go
+    name: Go ${{ matrix.go-version }} CI
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-
-      - name: Set up Go
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
 
-
-        steps:
-        - name: checkout code
-          uses: actions/checkout@v4
-        
-        - name: Setup Go 
-          uses: actions/setup-go@v2
-          with:
-           go-version: ${{matrix.go-version}}
-        
-        - name: Run golangci-lint
-          uses: golangci/golangci-lint-action@v6
-          with:
-            version: v1.54.2
-            run: 
-              go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.54.2
-              export PATH=$PATH:$(go env GOPATH)/bin
-              golangci-lint run
-            working-directory: src/product-catalog
-
-    docker:
-
-        runs-on: ubuntu-latest
-
-      - name: Install dependencies
-        run: go mod tidy
-        working-directory: src/product-catalog
+      - name: Download dependencies
+        run: |
+          cd src/product-catalog
+          go mod download
 
       - name: Build
-        run: go build ./...
-        working-directory: src/product-catalog
+        run: |
+          cd src/product-catalog
+          go build -o product-catalog-service main.go
 
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.54.2
+          run:
+            go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.54.2
+            export PATH=$PATH:$(go env GOPATH)/bin
+            golangci-lint run
+          working-directory: src/product-catalog
+          
 
       - name: Run tests
-        run: go test -v ./...
-        working-directory: src/product-catalog
-
-  
+        run: |
+          cd src/product-catalog
+          go test -v ./...
 
   docker:
     runs-on: ubuntu-latest
@@ -87,7 +61,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Docker
+      - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker
@@ -117,6 +91,7 @@ jobs:
       - name: Update tag in Kubernetes deployment manifest
         run: |
           sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}"'/product-catalog-service:'"${{ github.run_id }}"'|' kubernetes/productcatalog/deploy.yaml
+
       - name: Commit and push changes
         run: |
           git config --global user.email "shahipranav@gmail.com"
@@ -124,4 +99,3 @@ jobs:
           git add kubernetes/productcatalog/deploy.yaml
           git commit -m "[CI]: update product catalog image tag"
           git push
-m 
