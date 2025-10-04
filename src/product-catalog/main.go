@@ -44,7 +44,7 @@ func main() {
 }
 
 //nolint:unused // This helper function may be used for testing or external client setup
-func createClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error) {
+func {createClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error) {
 	// Use grpc.NewClient (grpc.DialContext is deprecated)
 	return grpc.NewClient(svcAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
