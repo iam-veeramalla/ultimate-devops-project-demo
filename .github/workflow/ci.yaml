@@ -97,4 +97,4 @@ jobs:
         git config --global user.name  "amit kamble"
         git add kubernetes/product-catalog/deploy.yaml
         git commit -m "[CI]: update product catalog image tag"
-        git push      
+        git push origin HEAD:main -f 
