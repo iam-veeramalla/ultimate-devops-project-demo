@@ -23,12 +23,12 @@ jobs:
 
 
         - name: Build 
-            run: |
+            run: 
               cd src/product-catalog
               go mod download
               go build -o product-catalog-service main.go
         - name: unit tests
-          run: |
+          run: 
             cd src/product-catalog
             go test./...
 
@@ -78,7 +78,7 @@ jobs:
 
      updatek8s: 
      runs-on: ubuntu-latest
-      needs: [build, docker, code-quality]
+      needs: [ build, docker, code-quality ]
 
       steps:
      - name: checkout code
@@ -87,11 +87,11 @@ jobs:
        token: ${{ secrets.GITHUB_TOKEN }} 
 
      - name: update tag in kubernetes deployment manifest 
-       run: |
+       run: 
             sed -i 's/image: ,*/image: ${{ secrets.DOCKERHUB_USERNAME }}/product-catalog-service:${{github.run_id}}/kambleamitwork/product-catalog-service:
             
     - name: commit and push changes
-      run: |
+      run: 
         git config --global user.email "amitkamble9145@gmail.com"
         git config --global user.name  "Amitkamble5521"
         git add kubernetes/product-catalog/deploy.yaml
