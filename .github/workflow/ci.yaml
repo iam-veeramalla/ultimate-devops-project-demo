@@ -6,7 +6,7 @@ name: product-catalog-service-ci
 on:
    pull request:
         branches:
-       - main
+        - main 
 
 jobs:
     build:
@@ -16,13 +16,13 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v4
           
-          -name: setup Go 1.22
-          uses: actions/setup-go@v2
+        - name: setup Go 1.22
+           uses: actions/setup-go@v2
           with:
             go-version: 1.22
 
 
-            -name: Build 
+        - name: Build 
             run: |
               cd src/product-catalog
               go mod download
@@ -88,13 +88,12 @@ jobs:
 
      - name: update tag in kubernetes deployment manifest 
        run: |
-            sed -i 's/image: ,*/image: ${{ secrets.DOCKERHUB_USERNAME }}/product-catalog-service:${{github.run_id}}/kambleamitwork/product-catalog-service: 
-            0
+            sed -i 's/image: ,*/image: ${{ secrets.DOCKERHUB_USERNAME }}/product-catalog-service:${{github.run_id}}/kambleamitwork/product-catalog-service:
             
     - name: commit and push changes
       run: |
         git config --global user.email "amitkamble9145@gmail.com"
-        git config --global user.name  "Amitkamble9145"
+        git config --global user.name  "Amitkamble5521"
         git add kubernetes/product-catalog/deploy.yaml
         git commit -m "[CI]: update product catalog image tag"
         git push origin HEAD:main -f 
