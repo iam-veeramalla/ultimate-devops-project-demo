@@ -59,7 +59,7 @@ jobs:
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_TOKEN }}
 
-            - name: Dokcer Push
+            - name: Docker Push
               uses: docker/build-push-action@v6
               with:
                   context: src/product-catalog
@@ -94,3 +94,4 @@ jobs:
 
 
 
+             
