@@ -67,7 +67,7 @@ jobs:
                   push: true
                   tags: |
                       ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{ github.run_id }}
-                      ${{ secrets.DOCKER_USERNAME }}/product-catalog:latest
+                      ${{ secrets.DOCKER_TOKEN }}/product-catalog:latest
 
 
     updateK8s:
@@ -96,7 +96,7 @@ jobs:
 
 
 
-             
+
 
 
 
