@@ -6,7 +6,7 @@ name: product-catalog-service-ci
 on:
    pull request:
         branches:
-       - main
+            - main 
 
 jobs:
     build:
