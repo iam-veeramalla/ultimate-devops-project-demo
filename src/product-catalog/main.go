@@ -316,7 +316,9 @@ func createClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error)
 	)
 }
 
-
-
+// create a dump function to test github actions
+func dump() {
+	log.Println("Dump function called")
+}		
 
 
