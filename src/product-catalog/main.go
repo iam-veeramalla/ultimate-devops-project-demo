@@ -308,7 +308,7 @@ func (p *productCatalog) checkProductFailure(ctx context.Context, id string) boo
 	)
 	return failureEnabled
 }
-//test
+//test tine
 func createClient(ctx context.Context, svcAddr string) (*grpc.ClientConn, error) {
 	return grpc.DialContext(ctx, svcAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
