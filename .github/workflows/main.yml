@@ -1,11 +1,13 @@
-# CI for Product Catalog Service
 
 name: product-catalog-ci
 
-on: 
-    pull_request:
-        branches:
-        - main
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'kubernetes/productcatalog/deploy.yaml' 
+
 
 jobs:
     build:
@@ -47,8 +49,9 @@ jobs:
           uses: golangci/golangci-lint-action@v6
           with:
             version: v1.55.2
-            run: golangci-lint run
             working-directory: src/product-catalog
+            args: --timeout 5m
+
 
     docker:
         runs-on: ubuntu-latest
@@ -86,7 +89,7 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v4
           with:
-            token: ${{ secrets.GITHUB_TOKEN }}
+            token: ${{ secrets.TOKEN }}
 
         - name: Update tag in kubernetes deployment manifest
           run: | 
@@ -94,8 +97,8 @@ jobs:
         
         - name: Commit and push changes
           run: |
-            git config --global user.email "abhishek@gmail.com"
-            git config --global user.name "Abhishek Veeramalla"
+            git config --global user.email "${{ secrets.EMAIL }}"
+            git config --global user.name "${{ secrets.USERNAME }}"
             git add kubernetes/productcatalog/deploy.yaml
             git commit -m "[CI]: Update product catalog image tag"
             git push origin HEAD:main -f
