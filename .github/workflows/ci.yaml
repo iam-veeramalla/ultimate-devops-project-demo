@@ -18,7 +18,7 @@ jobs:
         with:
           go-version: 1.22
       - name: download dependencies
-        run: go mod download ./src/product-catalog
+        run: go mod download 
           
       - name: Build the application
         run: go build -o product-catalog-service src/product-catalog/main.go
