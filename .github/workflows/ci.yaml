@@ -3,7 +3,7 @@ name: product-catalog-ci
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - "**/*"
 
