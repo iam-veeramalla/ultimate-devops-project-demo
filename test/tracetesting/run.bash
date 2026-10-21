@@ -108,3 +108,4 @@ echo ""
 echo "Tests done! Exit code: $max_exit_code"
 
 exit $max_exit_code
+
