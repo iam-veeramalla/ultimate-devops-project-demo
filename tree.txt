@@ -1,0 +1,770 @@
+eks
+├── buildkitd.toml
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── docker-compose-tests_include-override.yml
+├── docker-compose-tests.yml
+├── docker-compose.minimal.yml
+├── docker-compose.yml
+├── docker-gen-proto.sh
+├── dockerddddd
+├── eks
+│   └── backend
+│       ├── main.tf
+│       ├── terraform.tfstate
+│       └── terraform.tfstate.backup
+├── ide-gen-proto.sh
+├── internal
+│   └── tools
+│       ├── go.mod
+│       ├── go.sum
+│       ├── sanitycheck.py
+│       └── tools.go
+├── kubernetes
+│   ├── accounting
+│   │   └── deploy.yaml
+│   ├── ad
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── cart
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── checkout
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── complete-deploy.yaml
+│   ├── currency
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── email
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── flagd
+│   │   ├── cm.yaml
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── frauddetection
+│   │   └── deploy.yaml
+│   ├── frontend
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── frontendproxy
+│   │   ├── deploy.yaml
+│   │   ├── ingress.yaml
+│   │   └── svc.yaml
+│   ├── imageprovider
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── kafka
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── loadgenerator
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── payment
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── productcatalog
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── quote
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── recommendation
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   ├── serviceaccount.yaml
+│   ├── shipping
+│   │   ├── deploy.yaml
+│   │   └── svc.yaml
+│   └── valkey
+│       ├── deploy.yaml
+│       └── svc.yaml
+├── LICENSE
+├── Makefile
+├── package-lock.json
+├── package.json
+├── pb
+│   └── demo.proto
+├── README.md
+├── renovate.json5
+├── src
+│   ├── accounting
+│   │   ├── Accounting.csproj
+│   │   ├── Accounting.sln
+│   │   ├── Consumer.cs
+│   │   ├── Dockerfile
+│   │   ├── Helpers.cs
+│   │   ├── Log.cs
+│   │   ├── Program.cs
+│   │   └── README.md
+│   ├── ad
+│   │   ├── build.gradle
+│   │   ├── Dockerfile
+│   │   ├── gradle
+│   │   │   └── wrapper
+│   │   │       ├── gradle-wrapper.jar
+│   │   │       └── gradle-wrapper.properties
+│   │   ├── gradlew
+│   │   ├── gradlew.bat
+│   │   ├── pb
+│   │   │   └── demo.proto
+│   │   ├── README.md
+│   │   ├── settings.gradle
+│   │   └── src
+│   │       └── main
+│   │           ├── java
+│   │           │   └── oteldemo
+│   │           │       ├── AdService.java
+│   │           │       └── problempattern
+│   │           │           ├── CPULoad.java
+│   │           │           ├── GarbageCollectionTrigger.java
+│   │           │           └── MemoryUtils.java
+│   │           └── resources
+│   │               └── log4j2.xml
+│   ├── cart
+│   │   ├── cart.sln
+│   │   ├── NuGet.config
+│   │   ├── README.md
+│   │   ├── src
+│   │   │   ├── appsettings.json
+│   │   │   ├── cart.csproj
+│   │   │   ├── cartstore
+│   │   │   │   ├── ICartStore.cs
+│   │   │   │   └── ValkeyCartStore.cs
+│   │   │   ├── Dockerfile
+│   │   │   ├── Program.cs
+│   │   │   └── services
+│   │   │       └── CartService.cs
+│   │   └── tests
+│   │       ├── cart.tests.csproj
+│   │       └── CartServiceTests.cs
+│   ├── checkout
+│   │   ├── Dockerfile
+│   │   ├── genproto
+│   │   │   ├── Dockerfile
+│   │   │   └── oteldemo
+│   │   │       ├── demo_grpc.pb.go
+│   │   │       └── demo.pb.go
+│   │   ├── go.mod
+│   │   ├── go.sum
+│   │   ├── kafka
+│   │   │   └── producer.go
+│   │   ├── main.go
+│   │   ├── money
+│   │   │   ├── money_test.go
+│   │   │   └── money.go
+│   │   ├── README.md
+│   │   └── tools.go
+│   ├── currency
+│   │   ├── build
+│   │   │   └── generated
+│   │   │       └── proto
+│   │   │           ├── demo_mock.grpc.pb.h
+│   │   │           ├── demo.grpc.pb.cc
+│   │   │           ├── demo.grpc.pb.h
+│   │   │           ├── demo.pb.cc
+│   │   │           ├── demo.pb.h
+│   │   │           └── grpc
+│   │   │               └── health
+│   │   │                   └── v1
+│   │   │                       ├── health_mock.grpc.pb.h
+│   │   │                       ├── health.grpc.pb.cc
+│   │   │                       ├── health.grpc.pb.h
+│   │   │                       ├── health.pb.cc
+│   │   │                       └── health.pb.h
+│   │   ├── CMakeLists.txt
+│   │   ├── data
+│   │   │   └── currency_conversion.json
+│   │   ├── Dockerfile
+│   │   ├── genproto
+│   │   │   ├── CMakeLists.txt
+│   │   │   └── Dockerfile
+│   │   ├── proto
+│   │   │   └── grpc
+│   │   │       └── health
+│   │   │           └── v1
+│   │   │               └── health.proto
+│   │   ├── README.md
+│   │   └── src
+│   │       ├── logger_common.h
+│   │       ├── meter_common.h
+│   │       ├── server.cpp
+│   │       └── tracer_common.h
+│   ├── email
+│   │   ├── Dockerfile
+│   │   ├── email_server.rb
+│   │   ├── Gemfile
+│   │   ├── Gemfile.lock
+│   │   ├── README.md
+│   │   └── views
+│   │       └── confirmation.erb
+│   ├── flagd
+│   │   └── demo.flagd.json
+│   ├── flagd-ui
+│   │   ├── Dockerfile
+│   │   ├── next.config.mjs
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   ├── postcss.config.mjs
+│   │   ├── README.md
+│   │   ├── src
+│   │   │   ├── app
+│   │   │   │   ├── advanced
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── api
+│   │   │   │   │   ├── read-file
+│   │   │   │   │   │   └── route.ts
+│   │   │   │   │   └── write-to-file
+│   │   │   │   │       └── route.ts
+│   │   │   │   ├── globals.css
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── components
+│   │   │   │   ├── advanced
+│   │   │   │   │   ├── AdvancedView.tsx
+│   │   │   │   │   └── FileEditor.tsx
+│   │   │   │   ├── basic
+│   │   │   │   │   ├── BasicView.tsx
+│   │   │   │   │   ├── DefaultVariantSelect.tsx
+│   │   │   │   │   └── FeatureFlag.tsx
+│   │   │   │   ├── Layout.tsx
+│   │   │   │   ├── nav
+│   │   │   │   │   └── NavBar.tsx
+│   │   │   │   └── utils
+│   │   │   │       └── Spinner.tsx
+│   │   │   ├── instrumentation.ts
+│   │   │   └── utils
+│   │   │       └── types.ts
+│   │   ├── tailwind.config.ts
+│   │   └── tsconfig.json
+│   ├── fraud-detection
+│   │   ├── build.gradle.kts
+│   │   ├── Dockerfile
+│   │   ├── gradle
+│   │   │   └── wrapper
+│   │   │       ├── gradle-wrapper.jar
+│   │   │       └── gradle-wrapper.properties
+│   │   ├── gradle.properties
+│   │   ├── gradlew
+│   │   ├── gradlew.bat
+│   │   ├── README.md
+│   │   ├── settings.gradle.kts
+│   │   └── src
+│   │       └── main
+│   │           ├── kotlin
+│   │           │   └── frauddetection
+│   │           │       └── main.kt
+│   │           └── resources
+│   │               └── log4j2.xml
+│   ├── frontend
+│   │   ├── components
+│   │   │   ├── Ad
+│   │   │   │   ├── Ad.styled.ts
+│   │   │   │   ├── Ad.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── Banner
+│   │   │   │   ├── Banner.styled.ts
+│   │   │   │   ├── Banner.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── Button
+│   │   │   │   ├── Button.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── Cart
+│   │   │   │   ├── CartDetail.tsx
+│   │   │   │   └── EmptyCart.tsx
+│   │   │   ├── CartDropdown
+│   │   │   │   ├── CartDropdown.styled.ts
+│   │   │   │   ├── CartDropdown.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── CartIcon
+│   │   │   │   ├── CartIcon.styled.ts
+│   │   │   │   ├── CartIcon.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── CartItems
+│   │   │   │   ├── CartItem.tsx
+│   │   │   │   ├── CartItems.styled.ts
+│   │   │   │   ├── CartItems.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── CheckoutForm
+│   │   │   │   ├── CheckoutForm.styled.ts
+│   │   │   │   ├── CheckoutForm.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── CheckoutItem
+│   │   │   │   ├── CheckoutItem.styled.ts
+│   │   │   │   ├── CheckoutItem.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── CurrencySwitcher
+│   │   │   │   ├── CurrencySwitcher.styled.ts
+│   │   │   │   ├── CurrencySwitcher.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── Footer
+│   │   │   │   ├── Footer.styled.ts
+│   │   │   │   ├── Footer.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── Header
+│   │   │   │   ├── Header.styled.ts
+│   │   │   │   ├── Header.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── Input
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── Input.styled.ts
+│   │   │   │   └── Input.tsx
+│   │   │   ├── Layout
+│   │   │   │   ├── index.ts
+│   │   │   │   └── Layout.tsx
+│   │   │   ├── PlatformFlag
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── PlatformFlag.styled.ts
+│   │   │   │   └── PlatformFlag.tsx
+│   │   │   ├── ProductCard
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── ProductCard.styled.ts
+│   │   │   │   └── ProductCard.tsx
+│   │   │   ├── ProductList
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── ProductList.styled.ts
+│   │   │   │   └── ProductList.tsx
+│   │   │   ├── ProductPrice
+│   │   │   │   ├── index.ts
+│   │   │   │   └── ProductPrice.tsx
+│   │   │   ├── Recommendations
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── Recommendations.styled.ts
+│   │   │   │   └── Recommendations.tsx
+│   │   │   └── Select
+│   │   │       ├── index.ts
+│   │   │       ├── Select.styled.ts
+│   │   │       └── Select.tsx
+│   │   ├── cypress
+│   │   │   └── e2e
+│   │   │       ├── Checkout.cy.ts
+│   │   │       ├── Home.cy.ts
+│   │   │       └── ProductDetail.cy.ts
+│   │   ├── cypress.config.ts
+│   │   ├── Dockerfile
+│   │   ├── Dockerfile.cypress
+│   │   ├── gateways
+│   │   │   ├── Api.gateway.ts
+│   │   │   ├── rpc
+│   │   │   │   ├── Ad.gateway.ts
+│   │   │   │   ├── Cart.gateway.ts
+│   │   │   │   ├── Checkout.gateway.ts
+│   │   │   │   ├── Currency.gateway.ts
+│   │   │   │   ├── ProductCatalog.gateway.ts
+│   │   │   │   ├── Recommendations.gateway.ts
+│   │   │   │   └── Shipping.gateway.ts
+│   │   │   └── Session.gateway.ts
+│   │   ├── next.config.js
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   ├── pages
+│   │   │   ├── _app.tsx
+│   │   │   ├── _document.tsx
+│   │   │   ├── api
+│   │   │   │   ├── cart.ts
+│   │   │   │   ├── checkout.ts
+│   │   │   │   ├── currency.ts
+│   │   │   │   ├── data.ts
+│   │   │   │   ├── products
+│   │   │   │   │   ├── [productId]
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── recommendations.ts
+│   │   │   │   └── shipping.ts
+│   │   │   ├── cart
+│   │   │   │   ├── checkout
+│   │   │   │   │   └── [orderId]
+│   │   │   │   │       └── index.tsx
+│   │   │   │   └── index.tsx
+│   │   │   ├── index.tsx
+│   │   │   └── product
+│   │   │       └── [productId]
+│   │   │           └── index.tsx
+│   │   ├── providers
+│   │   │   ├── Ad.provider.tsx
+│   │   │   ├── Cart.provider.tsx
+│   │   │   └── Currency.provider.tsx
+│   │   ├── public
+│   │   │   ├── favicon.ico
+│   │   │   └── icons
+│   │   │       ├── Cart.svg
+│   │   │       ├── CartIcon.svg
+│   │   │       ├── Check.svg
+│   │   │       └── Chevron.svg
+│   │   ├── README.md
+│   │   ├── services
+│   │   │   └── ProductCatalog.service.ts
+│   │   ├── styles
+│   │   │   ├── Cart.styled.ts
+│   │   │   ├── Checkout.styled.ts
+│   │   │   ├── globals.css
+│   │   │   ├── Home.styled.ts
+│   │   │   ├── ProductDetail.styled.ts
+│   │   │   ├── style.d.ts
+│   │   │   └── Theme.ts
+│   │   ├── tsconfig.json
+│   │   ├── types
+│   │   │   └── Cart.ts
+│   │   └── utils
+│   │       ├── Cypress.ts
+│   │       ├── enums
+│   │       │   └── AttributeNames.ts
+│   │       ├── imageLoader.js
+│   │       ├── Request.ts
+│   │       └── telemetry
+│   │           ├── FrontendTracer.ts
+│   │           ├── Instrumentation.js
+│   │           ├── InstrumentationMiddleware.ts
+│   │           └── SessionIdProcessor.ts
+│   ├── frontend-proxy
+│   │   ├── Dockerfile
+│   │   ├── envoy.tmpl.yaml
+│   │   └── README.md
+│   ├── grafana
+│   │   ├── grafana.ini
+│   │   └── provisioning
+│   │       ├── dashboards
+│   │       │   ├── demo
+│   │       │   │   ├── demo-dashboard.json
+│   │       │   │   ├── exemplars-dashboard.json
+│   │       │   │   ├── opentelemetry-collector-data-flow.json
+│   │       │   │   ├── opentelemetry-collector.json
+│   │       │   │   └── spanmetrics-dashboard.json
+│   │       │   └── demo.yaml
+│   │       └── datasources
+│   │           ├── default.yaml
+│   │           ├── jaeger.yaml
+│   │           └── opensearch.yaml
+│   ├── image-provider
+│   │   ├── Dockerfile
+│   │   ├── nginx.conf.template
+│   │   └── static
+│   │       ├── Banner.png
+│   │       ├── opentelemetry-demo-logo.png
+│   │       └── products
+│   │           ├── EclipsmartTravelRefractorTelescope.jpg
+│   │           ├── LensCleaningKit.jpg
+│   │           ├── NationalParkFoundationExplorascope.jpg
+│   │           ├── OpticalTubeAssembly.jpg
+│   │           ├── RedFlashlight.jpg
+│   │           ├── RoofBinoculars.jpg
+│   │           ├── SolarFilter.jpg
+│   │           ├── SolarSystemColorImager.jpg
+│   │           ├── StarsenseExplorer.jpg
+│   │           └── TheCometBook.jpg
+│   ├── jaeger
+│   │   └── config.yml
+│   ├── kafka
+│   │   ├── Dockerfile
+│   │   └── README.md
+│   ├── load-generator
+│   │   ├── Dockerfile
+│   │   ├── locustfile.py
+│   │   ├── people.json
+│   │   ├── README.md
+│   │   └── requirements.txt
+│   ├── opensearch
+│   │   └── Dockerfile
+│   ├── otel-collector
+│   │   ├── otelcol-config-extras.yml
+│   │   └── otelcol-config.yml
+│   ├── payment
+│   │   ├── charge.js
+│   │   ├── Dockerfile
+│   │   ├── index.js
+│   │   ├── logger.js
+│   │   ├── opentelemetry.js
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   └── README.md
+│   ├── postgres
+│   │   ├── Dockerfile
+│   │   └── init.sql
+│   ├── product-catalog
+│   │   ├── Dockerfile
+│   │   ├── genproto
+│   │   │   ├── Dockerfile
+│   │   │   └── oteldemo
+│   │   │       ├── demo_grpc.pb.go
+│   │   │       └── demo.pb.go
+│   │   ├── go.mod
+│   │   ├── go.sum
+│   │   ├── main.go
+│   │   ├── products
+│   │   │   └── products.json
+│   │   ├── README.md
+│   │   └── tools.go
+│   ├── prometheus
+│   │   └── prometheus-config.yaml
+│   ├── quote
+│   │   ├── app
+│   │   │   ├── dependencies.php
+│   │   │   ├── routes.php
+│   │   │   └── settings.php
+│   │   ├── composer.json
+│   │   ├── Dockerfile
+│   │   ├── public
+│   │   │   └── index.php
+│   │   ├── README.md
+│   │   └── src
+│   │       └── Application
+│   │           └── Settings
+│   │               ├── Settings.php
+│   │               └── SettingsInterface.php
+│   ├── react-native-app
+│   │   ├── android
+│   │   │   ├── app
+│   │   │   │   ├── build.gradle
+│   │   │   │   ├── debug.keystore
+│   │   │   │   ├── proguard-rules.pro
+│   │   │   │   └── src
+│   │   │   │       ├── debug
+│   │   │   │       │   └── AndroidManifest.xml
+│   │   │   │       └── main
+│   │   │   │           ├── AndroidManifest.xml
+│   │   │   │           ├── ic_launcher-playstore.png
+│   │   │   │           ├── java
+│   │   │   │           │   └── io
+│   │   │   │           │       └── opentelemetry
+│   │   │   │           │           └── reactnativeapp
+│   │   │   │           │               ├── MainActivity.kt
+│   │   │   │           │               └── MainApplication.kt
+│   │   │   │           └── res
+│   │   │   │               ├── drawable
+│   │   │   │               │   ├── ic_launcher_background.xml
+│   │   │   │               │   ├── rn_edit_text_material.xml
+│   │   │   │               │   └── splashscreen.xml
+│   │   │   │               ├── drawable-hdpi
+│   │   │   │               │   └── splashscreen_image.png
+│   │   │   │               ├── drawable-mdpi
+│   │   │   │               │   └── splashscreen_image.png
+│   │   │   │               ├── drawable-xhdpi
+│   │   │   │               │   └── splashscreen_image.png
+│   │   │   │               ├── drawable-xxhdpi
+│   │   │   │               │   └── splashscreen_image.png
+│   │   │   │               ├── drawable-xxxhdpi
+│   │   │   │               │   └── splashscreen_image.png
+│   │   │   │               ├── mipmap-anydpi-v26
+│   │   │   │               │   ├── ic_launcher_round.xml
+│   │   │   │               │   └── ic_launcher.xml
+│   │   │   │               ├── mipmap-hdpi
+│   │   │   │               │   ├── ic_launcher_foreground.png
+│   │   │   │               │   ├── ic_launcher_round.png
+│   │   │   │               │   └── ic_launcher.png
+│   │   │   │               ├── mipmap-mdpi
+│   │   │   │               │   ├── ic_launcher_foreground.png
+│   │   │   │               │   ├── ic_launcher_round.png
+│   │   │   │               │   └── ic_launcher.png
+│   │   │   │               ├── mipmap-xhdpi
+│   │   │   │               │   ├── ic_launcher_foreground.png
+│   │   │   │               │   ├── ic_launcher_round.png
+│   │   │   │               │   └── ic_launcher.png
+│   │   │   │               ├── mipmap-xxhdpi
+│   │   │   │               │   ├── ic_launcher_foreground.png
+│   │   │   │               │   ├── ic_launcher_round.png
+│   │   │   │               │   └── ic_launcher.png
+│   │   │   │               ├── mipmap-xxxhdpi
+│   │   │   │               │   ├── ic_launcher_foreground.png
+│   │   │   │               │   ├── ic_launcher_round.png
+│   │   │   │               │   └── ic_launcher.png
+│   │   │   │               ├── values
+│   │   │   │               │   ├── colors.xml
+│   │   │   │               │   ├── ic_launcher_background.xml
+│   │   │   │               │   ├── strings.xml
+│   │   │   │               │   └── styles.xml
+│   │   │   │               └── values-night
+│   │   │   │                   └── colors.xml
+│   │   │   ├── build.gradle
+│   │   │   ├── gradle
+│   │   │   │   └── wrapper
+│   │   │   │       ├── gradle-wrapper.jar
+│   │   │   │       └── gradle-wrapper.properties
+│   │   │   ├── gradle.properties
+│   │   │   ├── gradlew
+│   │   │   ├── gradlew.bat
+│   │   │   └── settings.gradle
+│   │   ├── android.Dockerfile
+│   │   ├── app
+│   │   │   ├── _layout.tsx
+│   │   │   └── (tabs)
+│   │   │       ├── _layout.tsx
+│   │   │       ├── cart.tsx
+│   │   │       └── index.tsx
+│   │   ├── app.json
+│   │   ├── assets
+│   │   │   ├── fonts
+│   │   │   │   └── SpaceMono-Regular.ttf
+│   │   │   └── images
+│   │   │       ├── adaptive-icon.png
+│   │   │       ├── favicon.png
+│   │   │       ├── icon.png
+│   │   │       └── splash.png
+│   │   ├── babel.config.js
+│   │   ├── components
+│   │   │   ├── CheckoutForm
+│   │   │   │   ├── CheckoutForm.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── EmptyCart
+│   │   │   │   ├── EmptyCart.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── Field.tsx
+│   │   │   ├── navigation
+│   │   │   │   └── TabBarIcon.tsx
+│   │   │   ├── ProductCard
+│   │   │   │   ├── index.ts
+│   │   │   │   └── ProductCard.tsx
+│   │   │   ├── ProductList
+│   │   │   │   ├── index.ts
+│   │   │   │   └── ProductList.tsx
+│   │   │   ├── ThemedScrollView.tsx
+│   │   │   ├── ThemedText.tsx
+│   │   │   └── ThemedView.tsx
+│   │   ├── constants
+│   │   │   └── Colors.ts
+│   │   ├── gateways
+│   │   │   ├── Api.gateway.ts
+│   │   │   └── Session.gateway.ts
+│   │   ├── Gemfile
+│   │   ├── Gemfile.lock
+│   │   ├── hooks
+│   │   │   ├── useColorScheme.ts
+│   │   │   ├── useColorScheme.web.ts
+│   │   │   ├── useThemeColor.ts
+│   │   │   └── useTracer.ts
+│   │   ├── ios
+│   │   │   ├── Podfile
+│   │   │   ├── Podfile.lock
+│   │   │   ├── Podfile.properties.json
+│   │   │   ├── reactnativeapp
+│   │   │   │   ├── AppDelegate.h
+│   │   │   │   ├── AppDelegate.mm
+│   │   │   │   ├── Images.xcassets
+│   │   │   │   │   ├── AppIcon.appiconset
+│   │   │   │   │   │   ├── App-Icon-1024x1024@1x.png
+│   │   │   │   │   │   └── Contents.json
+│   │   │   │   │   ├── Contents.json
+│   │   │   │   │   ├── SplashScreen.imageset
+│   │   │   │   │   │   ├── Contents.json
+│   │   │   │   │   │   └── image.png
+│   │   │   │   │   └── SplashScreenBackground.imageset
+│   │   │   │   │       ├── Contents.json
+│   │   │   │   │       └── image.png
+│   │   │   │   ├── Info.plist
+│   │   │   │   ├── main.m
+│   │   │   │   ├── noop-file.swift
+│   │   │   │   ├── PrivacyInfo.xcprivacy
+│   │   │   │   ├── reactnativeapp-Bridging-Header.h
+│   │   │   │   ├── reactnativeapp.entitlements
+│   │   │   │   ├── SplashScreen.storyboard
+│   │   │   │   └── Supporting
+│   │   │   │       └── Expo.plist
+│   │   │   ├── reactnativeapp.xcodeproj
+│   │   │   │   ├── project.pbxproj
+│   │   │   │   └── xcshareddata
+│   │   │   │       └── xcschemes
+│   │   │   │           └── reactnativeapp.xcscheme
+│   │   │   └── reactnativeapp.xcworkspace
+│   │   │       ├── contents.xcworkspacedata
+│   │   │       └── xcshareddata
+│   │   │           └── IDEWorkspaceChecks.plist
+│   │   ├── metro.config.js
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   ├── protos
+│   │   │   └── demo.ts
+│   │   ├── providers
+│   │   │   └── Cart.provider.tsx
+│   │   ├── README.md
+│   │   ├── tsconfig.json
+│   │   ├── types
+│   │   │   └── Cart.ts
+│   │   └── utils
+│   │       ├── Localhost.ts
+│   │       ├── Request.ts
+│   │       └── SessionIdProcessor.ts
+│   ├── recommendation
+│   │   ├── demo_pb2_grpc.py
+│   │   ├── demo_pb2.py
+│   │   ├── Dockerfile
+│   │   ├── genproto
+│   │   │   └── Dockerfile
+│   │   ├── logger.py
+│   │   ├── metrics.py
+│   │   ├── README.md
+│   │   ├── recommendation_server.py
+│   │   └── requirements.txt
+│   └── shipping
+│       ├── build.rs
+│       ├── Cargo.lock
+│       ├── Cargo.toml
+│       ├── Dockerfile
+│       ├── README.md
+│       └── src
+│           ├── main.rs
+│           ├── shipping_service
+│           │   ├── quote.rs
+│           │   └── tracking.rs
+│           ├── shipping_service.rs
+│           ├── telemetry
+│           │   ├── logs_conf.rs
+│           │   ├── resources_conf.rs
+│           │   └── traces_conf.rs
+│           └── telemetry.rs
+└── test
+    ├── README.md
+    └── tracetesting
+        ├── ad
+        │   ├── all.yaml
+        │   └── get.yaml
+        ├── cart
+        │   ├── add-item-to-cart.yaml
+        │   ├── all.yaml
+        │   ├── check-if-cart-is-empty.yaml
+        │   ├── check-if-cart-is-populated.yaml
+        │   └── empty-cart.yaml
+        ├── checkout
+        │   ├── all.yaml
+        │   └── place-order.yaml
+        ├── cli-config.yml
+        ├── currency
+        │   ├── all.yaml
+        │   ├── convert.yaml
+        │   └── supported.yaml
+        ├── Dockerfile
+        ├── email
+        │   ├── all.yaml
+        │   └── confirmation.yaml
+        ├── frontend
+        │   ├── 01-see-ads.yaml
+        │   ├── 02-get-product-recommendation.yaml
+        │   ├── 03-browse-product.yaml
+        │   ├── 04-add-product-to-cart.yaml
+        │   ├── 05-view-cart.yaml
+        │   ├── 06-checking-out-cart.yaml
+        │   └── all.yaml
+        ├── otelcol-config-tracetest.yml
+        ├── payment
+        │   ├── all.yaml
+        │   ├── amex-credit-card-not-allowed.yaml
+        │   ├── expired-credit-card.yaml
+        │   ├── invalid-credit-card.yaml
+        │   └── valid-credit-card.yaml
+        ├── product-catalog
+        │   ├── all.yaml
+        │   ├── get.yaml
+        │   ├── list.yaml
+        │   └── search.yaml
+        ├── recommendation
+        │   ├── all.yaml
+        │   └── list.yaml
+        ├── run.bash
+        ├── shipping
+        │   ├── all.yaml
+        │   ├── empty-quote.yaml
+        │   ├── order.yaml
+        │   └── quote.yaml
+        ├── tracetest-config.yaml
+        └── tracetest-provision.yaml
+
+232 directories, 536 files
