@@ -27,9 +27,9 @@ jobs:
           go build -o product-catalog-service main.go
 
     - name: unit tests
+      working-directory: src/product-catalog
       run: |
-        cd src/product-catalog
-        go test ./...
+          go test ./...
 
   code-quality:
     runs-on: ubuntu-latest
