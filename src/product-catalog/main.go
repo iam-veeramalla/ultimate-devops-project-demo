@@ -1,3 +1,4 @@
+
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
 
@@ -310,3 +311,4 @@ func (p *productCatalog) checkProductFailure(ctx context.Context, id string) boo
 	)
 	return failureEnabled
 }
+
