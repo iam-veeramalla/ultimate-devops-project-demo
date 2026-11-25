@@ -24,7 +24,7 @@ jobs:
       run: |
           cd src/product-catalog
           go mod download
-          go build -o product-catalog-service src/product-catalog/main.go
+          go build -o product-catalog-service main.go
 
     - name: unit tests
       run: go test src/product-catalog/...
@@ -64,7 +64,7 @@ jobs:
           file: Dockerfile
           push: true
           tag: ${{secrets.DOCKER_USERNAME}}/product-catalog:${{github.run_id}}
-          
+
   updatek8s:
     runs-on: ubuntu-latest
     needs: docker
