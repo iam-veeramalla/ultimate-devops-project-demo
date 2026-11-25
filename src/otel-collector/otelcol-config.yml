@@ -17,6 +17,7 @@ receivers:
       - endpoint: http://frontend-proxy:${env:ENVOY_PORT}
   docker_stats:
     endpoint: unix:///var/run/docker.sock
+    api_version: "1.44"
   redis:
     endpoint: "valkey-cart:6379"
     username: "valkey"
